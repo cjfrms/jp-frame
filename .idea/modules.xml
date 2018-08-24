@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/jp-batch/jp-batch.iml" filepath="$PROJECT_DIR$/jp-batch/jp-batch.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jp-center/jp-center.iml" filepath="$PROJECT_DIR$/jp-center/jp-center.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jp-core/jp-core.iml" filepath="$PROJECT_DIR$/jp-core/jp-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jp-frame.iml" filepath="$PROJECT_DIR$/jp-frame.iml" />
+    </modules>
+  </component>
+</project>
