@@ -1,7 +1,7 @@
-package com.jptech.jpframe.core.batch.controller;
+package com.jptech.jpframe.jpbatch.contoller;
 
 import com.jptech.jpframe.core.batch.entity.BatchInfo;
-import com.jptech.jpframe.core.batch.service.BatchService;
+import com.jptech.jpframe.jpbatch.service.BatchService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

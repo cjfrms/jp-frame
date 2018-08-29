@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="jp-admin" />
         <module name="jp-batch" />
         <module name="jp-center" />
         <module name="jp-core" />
@@ -13,6 +14,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="jp-admin" target="1.8" />
       <module name="jp-batch" target="1.8" />
       <module name="jp-center" target="1.8" />
       <module name="jp-core" target="1.8" />

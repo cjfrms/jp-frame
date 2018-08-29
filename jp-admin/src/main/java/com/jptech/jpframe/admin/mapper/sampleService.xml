@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sampleService">
+    <select id="getSampleData" resultType="java.util.HashMap">
+        select * from QRTZ_FIRED_TRIGGERS  where TRIGGER_NAME = #{TRIGGER_NAME} and TRIGGER_GROUP = #{TRIGGER_GROUP}
+    </select>
+
+</mapper>

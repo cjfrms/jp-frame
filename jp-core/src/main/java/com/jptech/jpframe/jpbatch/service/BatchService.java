@@ -1,9 +1,11 @@
-package com.jptech.jpframe.core.batch.service;
+package com.jptech.jpframe.jpbatch.service;
 
 import com.jptech.jpframe.core.batch.entity.BatchInfo;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class BatchService {
 
     @Autowired
