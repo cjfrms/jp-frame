@@ -2,6 +2,7 @@ package com.jptech.jpframe.admin.comm;
 
 import com.jptech.jpframe.admin.comm.annotation.TargetDataSource;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -24,5 +25,11 @@ public class DynamicDataSourceAspect {
         String datasourceId = targetDataSource.id();
         logger.info(String.format("设置数据源为  %s", datasourceId));
         DataSourceContextHolder.set(targetDataSource.id());
+    }
+
+    @After("@annotation(targetDataSource)")
+    public void doAfter(JoinPoint joinPoint, TargetDataSource targetDataSource) {
+        logger.info(String.format("当前数据源  %s  执行清理方法", targetDataSource.id()));
+        DataSourceContextHolder.clear();
     }
 }
