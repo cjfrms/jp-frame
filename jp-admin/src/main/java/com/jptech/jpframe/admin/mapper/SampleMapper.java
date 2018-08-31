@@ -11,4 +11,6 @@ import java.util.Map;
 public interface SampleMapper extends FrameMapper {
 
     public List<Map> getSampleData(Map param);
+
+    public List<Map> getSample();
 }

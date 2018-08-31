@@ -7,4 +7,9 @@
         select * from QRTZ_FIRED_TRIGGERS  where TRIGGER_NAME = #{TRIGGER_NAME} and TRIGGER_GROUP = #{TRIGGER_GROUP}
     </select>
 
+    <select id="getSample" resultType="java.util.HashMap">
+        select * from sys_role
+    </select>
+
+
 </mapper>

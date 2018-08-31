@@ -18,7 +18,9 @@ public class SampleController {
     @GetMapping("/api/test")
     @ResponseBody
     public List<Map> test(){
-        return sampleService.getSampleData();
+        sampleService.getSampleData();
+        //sampleService.getSample();
+        return sampleService.getSample();
     }
 
 }

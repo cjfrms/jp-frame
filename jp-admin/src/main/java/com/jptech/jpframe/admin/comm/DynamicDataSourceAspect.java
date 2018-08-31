@@ -9,10 +9,12 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
+@Order(-1)
 @Aspect
 @Component
 public class DynamicDataSourceAspect {
@@ -26,13 +28,13 @@ public class DynamicDataSourceAspect {
     @Before("@annotation(targetDataSource)")
     public void doBefore(JoinPoint joinPoint, TargetDataSource targetDataSource) {
         String datasourceId = targetDataSource.id();
-        logger.info(String.format("设置数据源为  %s", datasourceId));
+        logger.debug(String.format("setting datasource ==>", datasourceId));
         DataSourceContextHolder.set(targetDataSource.id());
     }
 
     @After("@annotation(targetDataSource)")
     public void doAfter(JoinPoint joinPoint, TargetDataSource targetDataSource) {
-        logger.info(String.format("当前数据源  %s  执行清理方法", targetDataSource.id()));
+        logger.debug(String.format("clear datasource ==>", targetDataSource.id()));
         DataSourceContextHolder.clear();
     }
 

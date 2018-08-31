@@ -11,13 +11,16 @@ import java.util.Map;
 @Service
 public class SampleService extends FrameService<SampleMapper>{
 
-    @TargetDataSource(id = "xx")
+    @TargetDataSource(id = "ds-master")
     public List<Map> getSampleData(){
         Map con = new HashMap();
         con.put("TRIGGER_NAME","SampleBatch");
         con.put("TRIGGER_GROUP","sample");
         return this.mapper.getSampleData(con);
-        //return sampleMapper.getSampleData(con);
-        //return sqlManager.getResultSet(con,"sampleService.getSampleData");
+    }
+
+    //@TargetDataSource(id = "ds-slaveX")
+    public List<Map> getSample(){
+        return this.mapper.getSample();
     }
 }
