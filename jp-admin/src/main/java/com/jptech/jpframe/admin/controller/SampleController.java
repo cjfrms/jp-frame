@@ -23,4 +23,12 @@ public class SampleController {
         return sampleService.getSample();
     }
 
+    @GetMapping("/api/save")
+    @ResponseBody
+    public String testSave() throws Exception {
+        sampleService.saveTest();
+
+        return "ok";
+    }
+
 }

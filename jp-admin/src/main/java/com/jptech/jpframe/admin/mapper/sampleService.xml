@@ -11,5 +11,9 @@
         select * from sys_role
     </select>
 
+    <insert id="insertTest">
+        INSERT INTO `sys_role_menu` VALUES ('11', '1111');
+    </insert>
+
 
 </mapper>

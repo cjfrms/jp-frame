@@ -19,8 +19,16 @@ public class SampleService extends FrameService<SampleMapper>{
         return this.mapper.getSampleData(con);
     }
 
-    //@TargetDataSource(id = "ds-slaveX")
+    @TargetDataSource(id = "ds-slave")
     public List<Map> getSample(){
         return this.mapper.getSample();
+    }
+
+    @TargetDataSource(id = "ds-slave")
+    public void saveTest() throws Exception {
+        mapper.insertTest();;
+        if(true){
+            throw  new Exception("XXX");
+        }
     }
 }
