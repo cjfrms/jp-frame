@@ -25,28 +25,22 @@ import java.util.Map;
 @Configuration
 public class MybatisConfig {
 
-    private static final String[] DEFAULT_TRANSACTION_BEAN_NAMES = { "*Service" , "*ServiceImpl" };
-
-    private static final String[] DEFAULT_REQUIRED_METHOD_RULE_TRANSACTION_ATTRIBUTES  = {
-            "add*" ,
-            "save*" ,
+    private static final String POINTCUT_EXP = "execution(* *..service.*Service.*(..))";
+    private static final String[] TRANSACTION_REQUIRED_METHOD_RULE = {
             "insert*" ,
-            "delete*" ,
-            "update*" ,
-            "edit*" ,
-            "batch*" ,
             "create*" ,
+            "save*" ,
+            "add*" ,
+            "update*" ,
+            "delete*" ,
             "remove*" ,
+            "execute*"
     };
-
-    private static final String[] DEFAULT_READ_ONLY_METHOD_RULE_TRANSACTION_ATTRIBUTES = {
-            "get*" ,
-            "count*" ,
-            "find*" ,
-            "query*" ,
+    private static final String[] TRANSACTION_NOT_SUPPORTED_METHOD_RULE = {
             "select*" ,
+            "get*" ,
+            "find*" ,
             "list*" ,
-            "*" ,
     };
 
 
@@ -60,13 +54,6 @@ public class MybatisConfig {
     public DataSource slave() {
         return DruidDataSourceBuilder.create().build();
     }
-
-/*    @Bean
-    public DataSourceTransactionManager transactionManager() throws IOException {
-        DataSourceTransactionManager transactionManager =
-                new DataSourceTransactionManager(dynamicDataSource());
-        return transactionManager;
-    }*/
 
     @Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception {
@@ -95,34 +82,24 @@ public class MybatisConfig {
 
     @Bean
     public TransactionInterceptor txAdvice(PlatformTransactionManager platformTransactionManager) {
-        NameMatchTransactionAttributeSource source = new NameMatchTransactionAttributeSource();
-         /*只读事务，不做更新操作*/
-        RuleBasedTransactionAttribute readOnlyTx = new RuleBasedTransactionAttribute();
-        readOnlyTx.setReadOnly(true);
-        readOnlyTx.setPropagationBehavior(TransactionDefinition.PROPAGATION_NOT_SUPPORTED );
-        /*当前存在事务就使用当前事务，当前不存在事务就创建一个新的事务*/
-        RuleBasedTransactionAttribute requiredTx = new RuleBasedTransactionAttribute();
-        requiredTx.setRollbackRules(
-                Collections.singletonList(new RollbackRuleAttribute(Exception.class)));
-        requiredTx.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        requiredTx.setTimeout(TransactionDefinition.TIMEOUT_DEFAULT );
-        Map<String, TransactionAttribute> txMap = new HashMap<>();
-        txMap.put("add*", requiredTx);
-        txMap.put("save*", requiredTx);
-        txMap.put("insert*", requiredTx);
-        txMap.put("update*", requiredTx);
-        txMap.put("delete*", requiredTx);
-        txMap.put("get*", readOnlyTx);
-        txMap.put("query*", readOnlyTx);
-        source.setNameMap( txMap );
-        TransactionInterceptor txAdvice = new TransactionInterceptor(platformTransactionManager, source);
+        NameMatchTransactionAttributeSource attrSource = new NameMatchTransactionAttributeSource();
+        RuleBasedTransactionAttribute requiredTx = this.requiredTransactionRule();
+        RuleBasedTransactionAttribute readOnly = this.readOnlyTransactionRule();
+
+        for(String attr : TRANSACTION_REQUIRED_METHOD_RULE){
+            attrSource.addTransactionalMethod(attr,requiredTx);
+        }
+        for(String attr : TRANSACTION_NOT_SUPPORTED_METHOD_RULE){
+            attrSource.addTransactionalMethod(attr,readOnly);
+        }
+        TransactionInterceptor txAdvice = new TransactionInterceptor(platformTransactionManager, attrSource);
         return txAdvice;
     }
 
     @Bean
     public Advisor txAdviceAdvisor(PlatformTransactionManager platformTransactionManager) {
         AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
-        pointcut.setExpression("execution(* *..service.*Service.*(..))");
+        pointcut.setExpression(POINTCUT_EXP);
         return new DefaultPointcutAdvisor(pointcut, txAdvice(platformTransactionManager));
     }
 
