@@ -1,5 +1,6 @@
 package com.jptech.jpframe.admin.mapper;
 
+import com.jptech.jpframe.core.comm.mapper.FrameMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +16,6 @@ public interface SampleMapper extends FrameMapper {
     public List<Map> getSample();
 
     public void insertTest();
+
+    public void insertAnother();
 }

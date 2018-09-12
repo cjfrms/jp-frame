@@ -8,6 +8,8 @@
         <option value="$PROJECT_DIR$/jp-core/pom.xml" />
         <option value="$PROJECT_DIR$/jp-center/pom.xml" />
         <option value="$PROJECT_DIR$/jp-admin/pom.xml" />
+        <option value="$PROJECT_DIR$/jp-auth/pom.xml" />
+        <option value="$PROJECT_DIR$/jp-gateway/pom.xml" />
       </list>
     </option>
   </component>

@@ -11,6 +11,7 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -23,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+@EnableAspectJAutoProxy(exposeProxy = true)
 public class MybatisConfig {
 
     private static final String POINTCUT_EXP = "execution(* *..service.*Service.*(..))";
@@ -81,6 +83,11 @@ public class MybatisConfig {
     }
 
     @Bean
+    public PlatformTransactionManager platformTransactionManager() {
+        return new DataSourceTransactionManager(dynamicDataSource());
+    }
+
+    @Bean
     public TransactionInterceptor txAdvice(PlatformTransactionManager platformTransactionManager) {
         NameMatchTransactionAttributeSource attrSource = new NameMatchTransactionAttributeSource();
         RuleBasedTransactionAttribute requiredTx = this.requiredTransactionRule();
@@ -100,13 +107,8 @@ public class MybatisConfig {
     public Advisor txAdviceAdvisor(PlatformTransactionManager platformTransactionManager) {
         AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut();
         pointcut.setExpression(POINTCUT_EXP);
+        DefaultPointcutAdvisor xx = new DefaultPointcutAdvisor(pointcut, txAdvice(platformTransactionManager));
         return new DefaultPointcutAdvisor(pointcut, txAdvice(platformTransactionManager));
-    }
-
-
-    @Bean
-    public PlatformTransactionManager platformTransactionManager() {
-        return new DataSourceTransactionManager(dynamicDataSource());
     }
 
     private RuleBasedTransactionAttribute requiredTransactionRule () {

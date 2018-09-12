@@ -7,18 +7,22 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="jp-admin" />
+        <module name="jp-auth" />
         <module name="jp-batch" />
         <module name="jp-center" />
         <module name="jp-core" />
         <module name="jp-frame" />
+        <module name="jp-gateway" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="jp-admin" target="1.8" />
+      <module name="jp-auth" target="1.8" />
       <module name="jp-batch" target="1.8" />
       <module name="jp-center" target="1.8" />
       <module name="jp-core" target="1.8" />
       <module name="jp-frame" target="1.5" />
+      <module name="jp-gateway" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -2,8 +2,10 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/jp-admin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jp-auth" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/jp-batch" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/jp-center" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/jp-core" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jp-gateway" charset="UTF-8" />
   </component>
 </project>

@@ -15,5 +15,8 @@
         INSERT INTO `sys_role_menu` VALUES ('11', '1111');
     </insert>
 
+    <insert id="insertAnother">
+        INSERT INTO `t_test` VALUES ('aa', 'aaa');
+    </insert>
 
 </mapper>

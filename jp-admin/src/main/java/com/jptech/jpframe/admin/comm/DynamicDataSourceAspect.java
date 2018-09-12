@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
-@Order(0)
+@Order(-1)
 @Aspect
 @Component
 public class DynamicDataSourceAspect {
