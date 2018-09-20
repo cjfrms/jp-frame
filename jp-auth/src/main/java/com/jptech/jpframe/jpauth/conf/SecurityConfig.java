@@ -8,12 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -23,12 +18,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+        auth
+                .inMemoryAuthentication()
+                .withUser("usr").password(passwordEncoder().encode("pwd")).roles("USER");
+        //auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
     }
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
@@ -37,9 +35,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         return super.authenticationManagerBean();
     }
 
-    @Bean
+    /*@Bean
     public UserDetailsService userDetailsService() {
-        /*
+        *//*
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
 
         BCryptPasswordEncoder passwordEncode = new BCryptPasswordEncoder();
@@ -47,15 +45,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         manager.createUser(User.withUsername("user_1").password(pwd).authorities("USER").build());
         manager.createUser(User.withUsername("user_2").password(pwd).authorities("USER").build());
         return manager;
-        */
+        *//*
 
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
                 // 通过用户名获取用户信息
                 //Account account = accountRepository.findByName(name);
-                User user = new User("test", "pwd",
-                        AuthorityUtils.createAuthorityList("ROLE_01"));
+                System.out.println("XXXXX");
+                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                User user = new User("test", passwordEncoder.encode("pwd"),
+                        AuthorityUtils.createAuthorityList("ROLE_TRUSTED_CLIENT"));
                 return user;
 
 //                if (account != null) {
@@ -69,6 +69,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             }
         };
 
-    }
+    }*/
 
 }
