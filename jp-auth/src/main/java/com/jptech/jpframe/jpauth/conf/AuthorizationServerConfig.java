@@ -49,7 +49,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
                 .withClient("normal-app")
-                    .authorizedGrantTypes("authorization_code", "implicit") .scopes("test","read", "write").accessTokenValiditySeconds(accessTokenValiditySeconds).and()
+                    .authorizedGrantTypes("authorization_code", "implicit") .scopes("test","read", "write").accessTokenValiditySeconds(accessTokenValiditySeconds).secret(passwordEncoder.encode("secret")).and()
                 .withClient("trusted-app")
                     .authorizedGrantTypes("client_credentials", "password").scopes("test","read", "write").accessTokenValiditySeconds(accessTokenValiditySeconds).secret(passwordEncoder.encode("secret"));
     }
