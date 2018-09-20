@@ -10,6 +10,7 @@ public class UserController {
 
     @GetMapping("/user")
     public Principal user(Principal user){
+        System.out.print("AAAAXXX");
         return user;
     }
 }
