@@ -49,9 +49,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
                 .withClient("normal-app")
-                    .authorizedGrantTypes("authorization_code", "implicit") .scopes("test","read", "write").accessTokenValiditySeconds(accessTokenValiditySeconds).secret(passwordEncoder.encode("secret")).and()
+                    .authorizedGrantTypes("authorization_code", "implicit")
+                    .scopes("test","read", "write")
+                    .accessTokenValiditySeconds(accessTokenValiditySeconds)
+                    .secret(passwordEncoder.encode("secret"))
+                    .autoApprove(true)
+                .and()
                 .withClient("trusted-app")
-                    .authorizedGrantTypes("client_credentials", "password").scopes("test","read", "write").accessTokenValiditySeconds(accessTokenValiditySeconds).secret(passwordEncoder.encode("secret"));
+                    .authorizedGrantTypes("client_credentials", "password")
+                    .scopes("test","read", "write")
+                    .accessTokenValiditySeconds(accessTokenValiditySeconds)
+                    .secret(passwordEncoder.encode("secret"))
+                    .autoApprove(true);
+
     }
 
     @Bean
