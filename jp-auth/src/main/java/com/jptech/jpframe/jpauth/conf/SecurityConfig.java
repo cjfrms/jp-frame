@@ -1,7 +1,9 @@
 package com.jptech.jpframe.jpauth.conf;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,6 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
+    @Autowired
+    private UnauthorizedEntryPoint unauthorizedEntryPoint;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -26,15 +31,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
         http
-                .formLogin().permitAll()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint)
                 .and()
-                .requestMatchers().antMatchers("/login", "/oauth/**")
+                .authorizeRequests().antMatchers(HttpMethod.OPTIONS,"/","/login**", "/oauth/**","/error**").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .authorizeRequests().anyRequest().authenticated()
+                .formLogin().loginPage("/login").permitAll()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .logout().permitAll()
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
+        //http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
+
+/*    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring()
+                .antMatchers(HttpMethod.PUT, "/users/")
+                .antMatchers("/users/facebook/**")
+                .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/security", "/swagger-ui.html", "/webjars/**");
+    }*/
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

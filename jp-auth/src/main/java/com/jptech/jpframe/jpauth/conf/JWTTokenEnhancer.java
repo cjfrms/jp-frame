@@ -13,8 +13,7 @@ public class JWTTokenEnhancer implements TokenEnhancer {
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken oAuth2AccessToken, OAuth2Authentication oAuth2Authentication) {
         String userName = oAuth2Authentication.getUserAuthentication().getName();
-        User user = (User) oAuth2Authentication.getUserAuthentication().getPrincipal();// 与登录时候放进去的UserDetail实现类一直查看link{SecurityConfiguration}
-        /** 自定义一些token属性 ***/
+        User user = (User) oAuth2Authentication.getUserAuthentication().getPrincipal();
         final Map<String, Object> additionalInformation = new HashMap<>();
         additionalInformation.put("userName", userName);
         additionalInformation.put("roles", user.getAuthorities());

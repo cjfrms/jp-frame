@@ -8,8 +8,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
@@ -27,7 +25,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public void configure(ResourceServerSecurityConfigurer resources) {
         // @formatter:off
         resources.resourceId(resourceId);
-        resources.tokenServices(defaultTokenServices());
+        //resources.tokenServices(defaultTokenServices());
         // @formatter:on
     }
 
@@ -72,11 +70,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
      *
      * @return
      */
-    @Bean
+ /*   @Bean
     public ResourceServerTokenServices defaultTokenServices() {
         final DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
         defaultTokenServices.setTokenEnhancer(accessTokenConverter());
         defaultTokenServices.setTokenStore(tokenStore());
         return defaultTokenServices;
-    }
+    }*/
 }
