@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jptech.jpframe.jpauth.mapper.SampleMapper">
+
+
+    <select id="getSample" resultType="java.util.HashMap">
+        select * from QRTZ_FIRED_TRIGGERS
+    </select>
+
+</mapper>

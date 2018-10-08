@@ -1,0 +1,58 @@
+server:
+    port: 8090
+    servlet:
+        context-path: /auth
+spring:
+    application:
+        name: auth-service
+    datasource:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.jdbc.Driver
+        druid:
+            name: ds-master
+            url: jdbc:mysql://127.0.0.1:3306/jpframe?useUnicode=true&autoReconnect=true&rewriteBatchedStatements=TRUE&useSSL=false
+            username: root
+            password: whcjfrms
+            initial-size: 10
+            max-active: 100
+            min-idle: 10
+            max-wait: 60000
+            pool-prepared-statements: true
+            max-pool-prepared-statement-per-connection-size: 20
+            time-between-eviction-runs-millis: 60000
+            min-evictable-idle-time-millis: 300000
+            validation-query: SELECT 1 FROM DUAL
+            test-while-idle: true
+            test-on-borrow: false
+            test-on-return: false
+            stat-view-servlet:
+                enabled: true
+                url-pattern: /druid/*
+                #login-username: admin
+                #login-password: admin
+            filter:
+                stat:
+                    log-slow-sql: true
+                    slow-sql-millis: 1000
+                    merge-sql: true
+                wall:
+                    config:
+                        multi-statement-allow: true
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+security:
+  oauth2:
+    client:
+      client-id: normal-app
+      client-name: Client for user scope
+      client-secret: secret
+      provider: my-oauth-provider
+      scope: test
+      access-token-uri: http://localhost:8090/auth/oauth/token
+      user-authorization-uri: http://localhost:8090/auth/oauth/authorize
+    resource:
+      token-info-uri: http://localhost:8090/auth/oauth/check_token
+#      user-info-uri: ${auth-server}/user # 一个可以获取认证授权的自定义接口，可以在授权服务器，也可以在其他服务器上
+#      prefer-token-info: true # 如果同时配置了token-info-uri 和 user-info-uri，这个现象设置使用哪个取验证授权

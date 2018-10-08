@@ -1,5 +1,7 @@
 package com.jptech.jpframe.jpauth.conf;
 
+import com.jptech.jpframe.jpauth.entity.SysUser;
+import com.jptech.jpframe.jpauth.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +14,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Objects;
 
 @Configuration
 @EnableWebSecurity
@@ -22,6 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Autowired
     private UnauthorizedEntryPoint unauthorizedEntryPoint;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -56,11 +68,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
+
+/*        auth
                 .inMemoryAuthentication()
                 .withUser("usr").password(passwordEncoder().encode("pwd")).roles("USER")
-                .and().passwordEncoder(passwordEncoder());
-        //auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+                .and().passwordEncoder(passwordEncoder());*/
+        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
     }
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
@@ -69,40 +82,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         return super.authenticationManagerBean();
     }
 
-    /*@Bean
+    @Bean
     public UserDetailsService userDetailsService() {
-        *//*
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
 
-        BCryptPasswordEncoder passwordEncode = new BCryptPasswordEncoder();
-        String pwd = passwordEncode.encode("123456");
-        manager.createUser(User.withUsername("user_1").password(pwd).authorities("USER").build());
-        manager.createUser(User.withUsername("user_2").password(pwd).authorities("USER").build());
-        return manager;
-        *//*
+
 
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-                // 通过用户名获取用户信息
-                //Account account = accountRepository.findByName(name);
-                System.out.println("XXXXX");
-                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-                User user = new User("test", passwordEncoder.encode("pwd"),
+                SysUser sysUser = userMapper.getUserByLoginId(name);
+                if(Objects.isNull(sysUser)){
+                    throw new UsernameNotFoundException("用户不存在");
+                }
+                User user = new User(sysUser.getUsername() , sysUser.getPassword(),
                         AuthorityUtils.createAuthorityList("ROLE_TRUSTED_CLIENT"));
                 return user;
 
-//                if (account != null) {
-//                    User user = new User("test", "pwd",
-//                            AuthorityUtils.createAuthorityList("ROLE_01"));
-//                    return user;
-//                } else {
-//                    throw new UsernameNotFoundException("用户[" + name + "]不存在");
-//                }
-
             }
         };
-
-    }*/
+    }
 
 }

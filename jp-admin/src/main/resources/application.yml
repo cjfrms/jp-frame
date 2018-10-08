@@ -1,0 +1,86 @@
+server:
+  port: 8089
+  servlet:
+          context-path: /admin
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+spring:
+    application:
+        name: admin-service
+    datasource:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driverClassName: com.mysql.jdbc.Driver
+        druid:
+            name: ds-master
+            url: jdbc:mysql://127.0.0.1:3306/jpframe?useUnicode=true&autoReconnect=true&rewriteBatchedStatements=TRUE&useSSL=false
+            username: root
+            password: whcjfrms
+            initial-size: 10
+            max-active: 100
+            min-idle: 10
+            max-wait: 60000
+            pool-prepared-statements: true
+            max-pool-prepared-statement-per-connection-size: 20
+            time-between-eviction-runs-millis: 60000
+            min-evictable-idle-time-millis: 300000
+            validation-query: SELECT 1 FROM DUAL
+            test-while-idle: true
+            test-on-borrow: false
+            test-on-return: false
+            stat-view-servlet:
+                enabled: true
+                url-pattern: /druid/*
+                #login-username: admin
+                #login-password: admin
+            filter:
+                stat:
+                    log-slow-sql: true
+                    slow-sql-millis: 1000
+                    merge-sql: true
+                wall:
+                    config:
+                        multi-statement-allow: true
+        slave:
+                    name: ds-slave
+                    url: jdbc:mysql://127.0.0.1:3306/framework?useUnicode=true&autoReconnect=true&rewriteBatchedStatements=TRUE&useSSL=false
+                    username: root
+                    password: whcjfrms
+                    initial-size: 10
+                    max-active: 100
+                    min-idle: 10
+                    max-wait: 60000
+                    pool-prepared-statements: true
+                    max-pool-prepared-statement-per-connection-size: 20
+                    time-between-eviction-runs-millis: 60000
+                    min-evictable-idle-time-millis: 300000
+                    validation-query: SELECT 1 FROM DUAL
+                    test-while-idle: true
+                    test-on-borrow: false
+                    test-on-return: false
+                    stat-view-servlet:
+                        enabled: true
+                        url-pattern: /druid/*
+                        #login-username: admin
+                        #login-password: admin
+                    filter:
+                        stat:
+                            log-slow-sql: true
+                            slow-sql-millis: 1000
+                            merge-sql: true
+                        wall:
+                            config:
+                                multi-statement-allow: true
+security:
+  oauth2:
+    client:
+      client-id: normal-app
+      client-name: Client for user scope
+      client-secret: secret
+      provider: my-oauth-provider
+      scope: test
+      access-token-uri: http://localhost:8090/auth/oauth/token
+      user-authorization-uri: http://localhost:8090/auth/oauth/authorize
+    resource:
+      token-info-uri: http://localhost:8090/oauth/check_token
